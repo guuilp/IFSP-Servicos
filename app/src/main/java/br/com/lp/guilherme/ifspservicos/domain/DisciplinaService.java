@@ -22,11 +22,22 @@ public class DisciplinaService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = "DisciplinaService";
-    private static final String URL = "http://wsmock.com/v2/55fed3fa05f09cf5003aacb4";
+    private static final String URL_3semestre = "http://wsmock.com/v2/55ff325805f09c2f013aacb8";
+    private static final String URL_4semestre = "http://wsmock.com/v2/55ff321505f09c2f013aacb6";
+    private static final String URL_5semestre = "http://wsmock.com/v2/55fed3fa05f09cf5003aacb4";
+    private static final String URL = "URL_{numero}semestre";
 
-    public static List<Disciplina> getDisciplinas(Context context) throws IOException{
+    public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
+        String json;
 
-        String json = doGet(URL);
+        if ("3".equals(semestre)){
+            json = doGet(URL_3semestre);
+        } else if ("4".equals(semestre)){
+            json = doGet(URL_4semestre);
+        } else {
+            json = doGet(URL_5semestre);
+        }
+
         List<Disciplina> disciplinas = parserJSON(context, json);
         return disciplinas;
     }
@@ -52,7 +63,7 @@ public class DisciplinaService {
                 Disciplina d = new Disciplina();
                 // Lê as informações de cada Disciplina
                 d.codigo = jsonDisciplina.optString("codigo");
-                d.descricao = "Descrição: " + jsonDisciplina.optString("descricao");
+                d.descricao = "Descrição: " + jsonDisciplina.optString("descricao") + " (" + jsonDisciplina.optString("codigo") + ")";
                 d.nota = "Nota: " + jsonDisciplina.optString("nota");
                 d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia");
                 if (LOG_ON) {

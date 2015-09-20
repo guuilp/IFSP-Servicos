@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import br.com.lp.guilherme.ifspservicos.R;
-import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasFragment;
+import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,29 +52,27 @@ public class MainActivity extends AppCompatActivity {
                 menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
-                        replaceFragment(new DisciplinasFragment());
-                        Snackbar.make(mContentFrame, "Item One", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 0;
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_disciplinas:
-                        replaceFragment(new DisciplinasFragment());
-                        //Snackbar.make(mContentFrame, "Item One", Snackbar.LENGTH_SHORT).show();
+                        replaceFragment(new DisciplinasTabFragment());
                         mCurrentSelectedPosition = 1;
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_messages:
-                        Snackbar.make(mContentFrame, "Item Two", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 2;
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_friends:
-                        Snackbar.make(mContentFrame, "Item Three", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 3;
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_discussion:
-                        Snackbar.make(mContentFrame, "Item Four", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 4;
                         mDrawerLayout.closeDrawers();
                         return true;

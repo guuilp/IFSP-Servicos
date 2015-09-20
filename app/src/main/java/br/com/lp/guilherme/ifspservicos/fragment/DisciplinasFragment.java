@@ -29,6 +29,7 @@ public class DisciplinasFragment extends Fragment{
     protected RecyclerView recyclerView;
     private List<Disciplina> disciplinas;
     private LinearLayoutManager mLayoutManager;
+    private String semestre;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -39,6 +40,14 @@ public class DisciplinasFragment extends Fragment{
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null){
+            this.semestre = getArguments().getString("semestre");
+        }
     }
 
     @Override
@@ -58,7 +67,7 @@ public class DisciplinasFragment extends Fragment{
         protected List<Disciplina> doInBackground(Void... params) {
             try{
                 //Busca as disciplinas em background (Thread)
-                return DisciplinaService.getDisciplinas(getContext());
+                return DisciplinaService.getDisciplinas(getContext(), semestre);
             } catch (IOException e){
                 Log.e("ifspservicos", e.getMessage(), e);
                 return null;
