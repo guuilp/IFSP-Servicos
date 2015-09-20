@@ -22,9 +22,9 @@ public class DisciplinaService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = "DisciplinaService";
-    private static final String URL_3semestre = "http://wsmock.com/v2/55ff325805f09c2f013aacb8";
-    private static final String URL_4semestre = "http://wsmock.com/v2/55ff321505f09c2f013aacb6";
-    private static final String URL_5semestre = "http://wsmock.com/v2/55fed3fa05f09cf5003aacb4";
+    private static final String URL_3semestre = "http://wsmock.com/v2/55ff42a205f09c78013aacbb";
+    private static final String URL_4semestre = "http://wsmock.com/v2/55ff426605f09c7b013aacba";
+    private static final String URL_5semestre = "http://wsmock.com/v2/55ff425205f09c6f013aacb9";
     private static final String URL = "URL_{numero}semestre";
 
     public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
@@ -55,8 +55,7 @@ public class DisciplinaService {
         List<Disciplina> disciplinas = new ArrayList<Disciplina>();
         try {
             JSONObject root = new JSONObject(json);
-            JSONObject obj = root.getJSONObject("disciplinas");
-            JSONArray jsonDisciplinas = obj.getJSONArray("disciplina");
+            JSONArray jsonDisciplinas = root.getJSONArray("disciplina");
             // Insere cada Disciplina na lista
             for (int i = 0; i < jsonDisciplinas.length(); i++) {
                 JSONObject jsonDisciplina = jsonDisciplinas.getJSONObject(i);
