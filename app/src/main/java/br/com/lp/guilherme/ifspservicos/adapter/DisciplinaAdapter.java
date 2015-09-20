@@ -37,7 +37,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
     @Override
     public void onBindViewHolder(DisciplinaViewHolder holder, int position) {
         Disciplina d = disciplinas.get(position);
-        holder.tNome.setText(d.nome);
+        holder.tNome.setText(d.descricao);
         holder.tNota.setText(d.nota);
         holder.tFrequencia.setText(d.frequencia);
     }

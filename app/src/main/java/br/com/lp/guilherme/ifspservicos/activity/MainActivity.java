@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import br.com.lp.guilherme.ifspservicos.R;
-import br.com.lp.guilherme.ifspservicos.fragment.DisciplinaFragment;
+import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
                 menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
-                        replaceFragment(new DisciplinaFragment());
+                        replaceFragment(new DisciplinasFragment());
                         Snackbar.make(mContentFrame, "Item One", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 0;
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_disciplinas:
-                        replaceFragment(new DisciplinaFragment());
+                        replaceFragment(new DisciplinasFragment());
                         //Snackbar.make(mContentFrame, "Item One", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 1;
                         mDrawerLayout.closeDrawers();

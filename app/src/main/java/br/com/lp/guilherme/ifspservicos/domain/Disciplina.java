@@ -9,12 +9,13 @@ public class Disciplina implements Serializable{
     private static final long serialVersionUID = 6601006766832473959L;
 
     public long id;
-    public String nome;
+    public String codigo;
+    public String descricao;
     public String nota;
     public String frequencia;
 
     @Override
     public String toString() {
-        return "Disciplina{" + "nome='" + nome + '\'' + '}';
+        return "Disciplina{" + "nome='" + codigo + '\'' + '}';
     }
 }

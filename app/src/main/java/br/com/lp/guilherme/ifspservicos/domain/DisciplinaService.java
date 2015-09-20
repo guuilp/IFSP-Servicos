@@ -1,7 +1,17 @@
 package br.com.lp.guilherme.ifspservicos.domain;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,20 +20,53 @@ import java.util.List;
  */
 public class DisciplinaService {
 
-    public static List<Disciplina> getDisciplinas(Context context){
-        List<Disciplina> materias = new ArrayList<Disciplina>();
-        List<String> materia = new ArrayList<String>();
-        materia.add("Português");
-        materia.add("História");
-        materia.add("Geografia");
-        for (int i = 0; i < materia.size(); i++) {
-            Disciplina d = new Disciplina();
-            d.nome = "Disciplina: " + materia.get(i);
-            d.nota = "Nota: " + i;
-            d.frequencia = "Frequência: " + i*10 + "%";
-            materias.add(d);
+    private static final boolean LOG_ON = false;
+    private static final String TAG = "DisciplinaService";
+    private static final String URL = "http://wsmock.com/v2/55fed3fa05f09cf5003aacb4";
+
+    public static List<Disciplina> getDisciplinas(Context context) throws IOException{
+
+        String json = doGet(URL);
+        List<Disciplina> disciplinas = parserJSON(context, json);
+        return disciplinas;
+    }
+
+    private static String doGet(String url) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = okHttpClient.newCall(request).execute();
+        return response.body().string();
+    }
+
+    private static List<Disciplina> parserJSON(Context context, String json) throws IOException {
+        List<Disciplina> disciplinas = new ArrayList<Disciplina>();
+        try {
+            JSONObject root = new JSONObject(json);
+            JSONObject obj = root.getJSONObject("disciplinas");
+            JSONArray jsonDisciplinas = obj.getJSONArray("disciplina");
+            // Insere cada Disciplina na lista
+            for (int i = 0; i < jsonDisciplinas.length(); i++) {
+                JSONObject jsonDisciplina = jsonDisciplinas.getJSONObject(i);
+                Disciplina d = new Disciplina();
+                // Lê as informações de cada Disciplina
+                d.codigo = jsonDisciplina.optString("codigo");
+                d.descricao = "Descrição: " + jsonDisciplina.optString("descricao");
+                d.nota = "Nota: " + jsonDisciplina.optString("nota");
+                d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia");
+                if (LOG_ON) {
+                    Log.d(TAG, "Disciplina " + d.codigo);
+                }
+                disciplinas.add(d);
+            }
+            if (LOG_ON) {
+                Log.d(TAG, disciplinas.size() + " encontrados.");
+            }
+        } catch (JSONException e) {
+            throw new IOException(e.getMessage(), e);
         }
-        return materias;
+        return disciplinas;
     }
 
 }
