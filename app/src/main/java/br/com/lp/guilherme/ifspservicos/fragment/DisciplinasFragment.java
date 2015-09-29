@@ -1,5 +1,8 @@
 package br.com.lp.guilherme.ifspservicos.fragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,8 +60,13 @@ public class DisciplinasFragment extends Fragment{
     }
 
     private void taskDisciplinas() {
-        //Busca as disciplinas: dispara a task
-        new GetDisciplinasTask().execute();
+        if (isOnline()){
+            //Busca as disciplinas: dispara a task
+            new GetDisciplinasTask().execute();
+        } else {
+            Toast.makeText(getContext(), "Conexão com a internet não disponível", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private class GetDisciplinasTask extends AsyncTask<Void, Void, List<Disciplina>>{
@@ -69,6 +77,7 @@ public class DisciplinasFragment extends Fragment{
                 //Busca as disciplinas em background (Thread)
                 return DisciplinaService.getDisciplinas(getContext(), semestre);
             } catch (IOException e){
+                Toast.makeText(getContext(), "Não foi possivel recuperar a lista de disciplinas", Toast.LENGTH_LONG).show();
                 Log.e("ifspservicos", e.getMessage(), e);
                 return null;
             }
@@ -92,5 +101,12 @@ public class DisciplinasFragment extends Fragment{
                 Toast.makeText(getContext(), "Disciplina: " + c.codigo, Toast.LENGTH_LONG).show();
             }
         };
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
