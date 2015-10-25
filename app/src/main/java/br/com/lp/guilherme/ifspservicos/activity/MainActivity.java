@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
+import br.com.lp.guilherme.ifspservicos.fragment.NoticiaFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                         mCurrentSelectedPosition = 1;
                         mDrawerLayout.closeDrawers();
                         return true;
-                    case R.id.nav_messages:
-                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
+                    case R.id.nav_noticias:
+                        replaceFragment(new NoticiaFragment());
                         mCurrentSelectedPosition = 2;
                         mDrawerLayout.closeDrawers();
                         return true;

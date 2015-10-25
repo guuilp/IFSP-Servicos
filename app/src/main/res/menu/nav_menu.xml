@@ -10,7 +10,7 @@
             android:icon="@drawable/ic_dashboard"
             android:title="Disciplinas" />
         <item
-            android:id="@+id/nav_messages"
+            android:id="@+id/nav_noticias"
             android:icon="@drawable/ic_event"
             android:title="Notícias IFSP" />
         <item
