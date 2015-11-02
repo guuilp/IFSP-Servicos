@@ -25,7 +25,6 @@ public class DisciplinaService {
     private static final String URL_3semestre = "http://wsmock.com/v2/55ff42a205f09c78013aacbb";
     private static final String URL_4semestre = "http://wsmock.com/v2/55ff426605f09c7b013aacba";
     private static final String URL_5semestre = "http://wsmock.com/v2/55ff425205f09c6f013aacb9";
-//    private static final String URL_3semestre = "http://ifspservicos.site40.net/teste.php"; //URL do WebService que está sendo desenvolvido
 
     public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
         String json;
