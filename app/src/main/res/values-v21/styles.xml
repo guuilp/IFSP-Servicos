@@ -11,6 +11,9 @@
         <!-- Cor para o efeito ripple -->
         <item name="colorControlHighlight">@color/control_highlight</item>
 
+        <item name="colorButtonNormal">@color/primary</item>
+        <item name="android:colorButtonNormal">@color/primary</item>
+
         <item name="android:windowTranslucentStatus">true</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
