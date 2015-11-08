@@ -74,6 +74,7 @@ public class DisciplinasFragment extends Fragment{
         @Override
         protected List<Disciplina> doInBackground(Void... params) {
             try{
+//                Looper.prepare();
                 //Busca as disciplinas em background (Thread)
                 return DisciplinaService.getDisciplinas(getContext(), semestre);
             } catch (IOException e){

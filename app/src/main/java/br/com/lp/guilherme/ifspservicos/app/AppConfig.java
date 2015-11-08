@@ -5,5 +5,5 @@ package br.com.lp.guilherme.ifspservicos.app;
  */
 public class AppConfig {
     // Server user login url
-    public static String URL_LOGIN = "http://ifspservicos.esy.es/usuario/login";
+    public static String URL_LOGIN = "http://192.168.1.15/IFSP-ServicosWS/usuario/login";
 }

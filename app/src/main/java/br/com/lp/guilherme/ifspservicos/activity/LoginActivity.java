@@ -74,13 +74,13 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                String email = inputRa.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
+                String ra = inputRa.getText().toString().trim();
+                String senha = inputPassword.getText().toString().trim();
 
                 // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
+                if (!ra.isEmpty() && !senha.isEmpty()) {
                     // login user
-                    checkLogin(email, password);
+                    checkLogin(ra, senha);
                 } else {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * function to verify login details in mysql db
      * */
-    private void checkLogin(final String email, final String password) {
+    private void checkLogin(final String ra, final String senha) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
@@ -117,27 +117,22 @@ public class LoginActivity extends AppCompatActivity {
                     // Check for error node in json
                     if (!error) {
                         // user successfully logged in
+
                         // Create login session
                         session.setLogin(true);
 
-                        // Now store the user in SQLite
-//                        String uid = jObj.getString("token");
-
                         JSONArray user = jObj.getJSONArray("data");
-//                        JSONObject user = jObj.getJSONObject("data");
-                        JSONObject user1 = user.getJSONObject(0);
-                        String uid =  user1.optString("token");
-                        String name = user1.optString("id_usuario");
-                        String email = user1.optString("id_usuairo");
-                        String created_at = user1
-                                .optString("created_at");
+                        JSONObject details = user.getJSONObject(0);
+                        String ra =  details.optString("ra");
+                        String id_usuario = details.optString("id_usuario");
+                        String token =  details.optString("token");
+                        String nome = details.optString("nome");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at);
+                        db.addUser(id_usuario, nome, ra, token);
 
                         // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
@@ -168,8 +163,8 @@ public class LoginActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("usuario", email);
-                params.put("senha", password);
+                params.put("usuario", ra);
+                params.put("senha", senha);
 
                 return params;
             }

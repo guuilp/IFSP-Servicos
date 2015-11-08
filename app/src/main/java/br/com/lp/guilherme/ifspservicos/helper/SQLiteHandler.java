@@ -21,16 +21,16 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "android_api";
+    private static final String DATABASE_NAME = "ifspservicos";
 
     // Login table name
     private static final String TABLE_USER = "user";
 
     // Login Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_UID = "uid";
+    private static final String KEY_ID_USUARIO = "id_usuario";
+    private static final String KEY_NOME = "name";
+    private static final String KEY_RA = "ra";
+    private static final String KEY_TOKEN = "token";
     private static final String KEY_CREATED_AT = "created_at";
 
     public SQLiteHandler(Context context) {
@@ -40,10 +40,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EMAIL + " TEXT UNIQUE," + KEY_UID + " TEXT,"
-                + KEY_CREATED_AT + " TEXT" + ")";
+                + KEY_ID_USUARIO + " INTEGER PRIMARY KEY,"
+                + KEY_NOME + " TEXT,"
+                + KEY_RA + " TEXT UNIQUE,"
+                + KEY_TOKEN + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -62,14 +66,16 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String name, String email, String uid, String created_at) {
+    public void addUser(String id_usuario, String nome, String ra, String token) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        onCreate(db);
+
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name); // Name
-        values.put(KEY_EMAIL, email); // Email
-        values.put(KEY_UID, uid); // Email
-        values.put(KEY_CREATED_AT, created_at); // Created At
+        values.put(KEY_ID_USUARIO, id_usuario);
+        values.put(KEY_NOME, nome);
+        values.put(KEY_RA, ra);
+        values.put(KEY_TOKEN, token);
 
         // Inserting Row
         long id = db.insert(TABLE_USER, null, values);
@@ -87,13 +93,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
         // Move to first row
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
+            user.put("id_usuario", cursor.getString(0));
             user.put("name", cursor.getString(1));
-            user.put("email", cursor.getString(2));
-            user.put("uid", cursor.getString(3));
-            user.put("created_at", cursor.getString(4));
+            user.put("ra", cursor.getString(2));
+            user.put("token", cursor.getString(3));
         }
         cursor.close();
         db.close();
