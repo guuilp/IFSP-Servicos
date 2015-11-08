@@ -1,7 +1,10 @@
 package br.com.lp.guilherme.ifspservicos.domain;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -13,7 +16,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,35 +36,25 @@ public class DisciplinaService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = "DisciplinaService";
-    private static final String URL_3semestre = "http://192.168.1.15/IFSP-ServicosWS/medias";
-    private static final String URL_4semestre = "http://192.168.1.15/IFSP-ServicosWS/medias";
-    private static final String URL_5semestre = "http://192.168.1.15/IFSP-ServicosWS/medias";
+    private static final String URL = "http://192.168.1.15/IFSP-ServicosWS/medias";
 
     public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
-        String json;
+        List<Disciplina> disciplinas = getDisciplinasFromArquivo(context, semestre);
 
-        if ("3".equals(semestre)){
-            json = doPost(URL_3semestre, context);
-        } else if ("4".equals(semestre)){
-            json = doPost(URL_4semestre, context);
-        } else {
-            json = doPost(URL_5semestre, context);
+        if(disciplinas != null && disciplinas.size() > 0){
+            //Encontrou o arquivo
+            return disciplinas;
         }
-
-        List<Disciplina> disciplinas = parserJSON(context, json);
+        if (isOnline(context)) {
+            //Se não encontrar, busca no web service
+            disciplinas = getDisciplinasFromWebService(context, semestre);
+        } else {
+            Toast.makeText(context, "Conexão com a internet não disponível", Toast.LENGTH_SHORT).show();
+        }
         return disciplinas;
     }
 
-    private static String doGet(String url) throws IOException {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        Response response = okHttpClient.newCall(request).execute();
-        return response.body().string();
-    }
-
-    private static String doPost(String url, Context context) throws IOException{
+    private static String doPost(String url, Context context, String semestre) throws IOException{
         SQLiteHandler db = new SQLiteHandler(context);
 
         HashMap<String, String> user = db.getUserDetails();
@@ -66,6 +65,7 @@ public class DisciplinaService {
 
         RequestBody body = new FormEncodingBuilder()
                 .add("id_usuario", id_usuario)
+                .add("semestre", semestre)
                 .build();
         Request request = new Request.Builder()
                 .url(url)
@@ -104,4 +104,96 @@ public class DisciplinaService {
         return disciplinas;
     }
 
+    public static List<Disciplina> getDisciplinasFromWebService(Context context, String semestre) throws IOException{
+        String json;
+
+        json = doPost(URL, context, semestre);
+        salvaArquivoNaMemoriaInterna(context, semestre, json);
+        List<Disciplina> disciplinas = parserJSON(context, json);
+        return disciplinas;
+    }
+
+    //Abre o arquivo salvo, se existir, e cria a lista de carros
+    public static List<Disciplina> getDisciplinasFromArquivo(Context context, String semestre) throws IOException{
+        String fileName = String.format("disciplinas_semestre_" + semestre + ".json");
+        Log.d(TAG, "Abrindo o arquivo: " + fileName);
+        //Lê o arquivo da memória interna
+        String json = readFile(context, fileName, "UTF-8");
+
+        if(json == null){
+            Log.d(TAG, "Arquivo " + fileName + " não encontrado.");
+            return null;
+        }
+
+        List<Disciplina> disciplinas = parserJSON(context, json);
+        Log.d(TAG, "Disciplinas lidas do arquivo " + fileName);
+        return disciplinas;
+    }
+
+    private static void salvaArquivoNaMemoriaInterna(Context context, String semestre, String json){
+        String fileName = "disciplinas_semestre_" + semestre + ".json";
+        File file = context.getFileStreamPath(fileName);
+        try{
+            FileOutputStream out = new FileOutputStream(file);
+            out.write(json.getBytes());
+            out.flush();
+            out.close();
+        } catch(IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        Log.d(TAG, "Arquivo salvo: " + file);
+    }
+
+    public static String toString(InputStream in, String charset) throws IOException {
+        byte[] bytes = toBytes(in);
+        String texto = new String(bytes, charset);
+        return texto;
+    }
+
+    /**
+     * Converte a InputStream para bytes[]
+     */
+    public static byte[] toBytes(InputStream in) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                bos.write(buffer, 0, len);
+            }
+            byte[] bytes = bos.toByteArray();
+            return bytes;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            return null;
+        } finally {
+            try {
+                bos.close();
+                in.close();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * Lê o arquivo da memória interna.
+     */
+    public static String readFile(Context context, String fileName, String charset) throws IOException {
+        try {
+            // Cria o arquivo e retorna o OutputStream
+            FileInputStream in = context.openFileInput(fileName);
+            String s = toString(in, charset);
+            return s;
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 }

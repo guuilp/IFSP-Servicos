@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -60,13 +61,7 @@ public class DisciplinasFragment extends Fragment{
     }
 
     private void taskDisciplinas() {
-        if (isOnline()){
-            //Busca as disciplinas: dispara a task
-            new GetDisciplinasTask().execute();
-        } else {
-            Toast.makeText(getContext(), "Conexão com a internet não disponível", Toast.LENGTH_SHORT).show();
-        }
-
+        new GetDisciplinasTask().execute();
     }
 
     private class GetDisciplinasTask extends AsyncTask<Void, Void, List<Disciplina>>{
@@ -74,7 +69,10 @@ public class DisciplinasFragment extends Fragment{
         @Override
         protected List<Disciplina> doInBackground(Void... params) {
             try{
-//                Looper.prepare();
+                //Caso não estiver online, coloca na fila
+                if(!isOnline()){
+                    Looper.prepare();
+                }
                 //Busca as disciplinas em background (Thread)
                 return DisciplinaService.getDisciplinas(getContext(), semestre);
             } catch (IOException e){

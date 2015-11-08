@@ -31,7 +31,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_NOME = "name";
     private static final String KEY_RA = "ra";
     private static final String KEY_TOKEN = "token";
-    private static final String KEY_CREATED_AT = "created_at";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
