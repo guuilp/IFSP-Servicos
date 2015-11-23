@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import br.com.lp.guilherme.ifspservicos.R;
+import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.TabsAdapter;
 
 /**
@@ -24,18 +25,19 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_disciplinas_tab, container, false);
         //View Pager
+        ((MainActivity) getActivity()).setTitle("IFSP Serviços - Disciplinas");
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new TabsAdapter(getContext(), getChildFragmentManager()));
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         int cor = getContext().getResources().getColor(R.color.white);
         tabLayout.setTabTextColors(cor, cor);
-        tabLayout.addTab(tabLayout.newTab().setText("3º Semestre"));
+//        tabLayout.addTab(tabLayout.newTab().setText("3º Semestre"));
         tabLayout.addTab(tabLayout.newTab().setText("4º Semestre"));
         tabLayout.addTab(tabLayout.newTab().setText("5º Semestre"));
         tabLayout.setOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        mViewPager.setCurrentItem(3);
+        mViewPager.setCurrentItem(2);
         return view;
     }
 

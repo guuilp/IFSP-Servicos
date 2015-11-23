@@ -21,19 +21,19 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Override
     public Fragment getItem(int position) {
         Bundle args = new Bundle();
         if(position == 0){
-            args.putString("semestre", "3");
+            args.putString("semestre", "1");
         } else if(position == 1) {
-            args.putString("semestre", "4");
-        } else if(position == 2){
-            args.putString("semestre", "5");
-        }
+            args.putString("semestre", "2");
+        } //else if(position == 2){
+//            args.putString("semestre", "2");
+//        }
         Fragment f = new DisciplinasFragment();
         f.setArguments(args);
         return f;
@@ -42,10 +42,10 @@ public class TabsAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if(position == 0){
-            return "3º Semestre";
-        } else if (position == 1){
             return "4º Semestre";
-        }
+        } //else if (position == 1){
+//            return "5º Semestre";
+//        }
         return "5º Semestre";
     }
 }

@@ -1,5 +1,6 @@
 package br.com.lp.guilherme.ifspservicos.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -14,7 +15,9 @@ import android.widget.FrameLayout;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
-import br.com.lp.guilherme.ifspservicos.fragment.NoticiaFragment;
+import br.com.lp.guilherme.ifspservicos.fragment.NoticiasFragment;
+import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
+import br.com.lp.guilherme.ifspservicos.helper.SessionManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     NavigationView mNavigationView;
     FrameLayout mContentFrame;
+    private SQLiteHandler db;
+    private SessionManager session;
 
-    private static final String PREFERENCES_FILE = "mymaterialapp_settings";
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
     private boolean mUserLearnedDrawer;
@@ -43,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // session manager
+        session = new SessionManager(getApplicationContext());
 
         setUpNavDrawer();
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -63,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_noticias:
-                        replaceFragment(new NoticiaFragment());
+                        replaceFragment(new NoticiasFragment());
                         mCurrentSelectedPosition = 2;
                         mDrawerLayout.closeDrawers();
                         return true;
@@ -75,6 +84,19 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_discussion:
                         Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 4;
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    case R.id.nav_logout:
+                        session.setLogin(false);
+
+                        db.deleteUsers();
+
+                        // Launching the login activity
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                        mCurrentSelectedPosition = 5;
                         mDrawerLayout.closeDrawers();
                         return true;
                     default:
