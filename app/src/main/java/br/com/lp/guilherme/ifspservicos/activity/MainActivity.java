@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
-import br.com.lp.guilherme.ifspservicos.fragment.NoticiaFragment;
+import br.com.lp.guilherme.ifspservicos.fragment.NoticiasFragment;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 import br.com.lp.guilherme.ifspservicos.helper.SessionManager;
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_noticias:
-                        replaceFragment(new NoticiaFragment());
+                        replaceFragment(new NoticiasFragment());
                         mCurrentSelectedPosition = 2;
                         mDrawerLayout.closeDrawers();
                         return true;

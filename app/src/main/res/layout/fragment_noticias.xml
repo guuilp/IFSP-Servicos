@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="6dp"
     android:paddingRight="6dp"
-    tools:context="br.com.lp.guilherme.ifspservicos.fragment.DisciplinasFragment">
+    tools:context="br.com.lp.guilherme.ifspservicos.fragment.NoticiaFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -16,6 +16,5 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical" />
+        android:scrollbarStyle="outsideOverlay" />
 </FrameLayout>

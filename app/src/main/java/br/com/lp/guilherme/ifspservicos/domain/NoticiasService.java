@@ -30,44 +30,40 @@ import java.util.List;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 
 /**
- * Created by Guilherme on 08-Sep-15.
+ * Created by Guilherme on 22-Nov-15.
  */
-public class DisciplinaService {
-
+public class NoticiasService {
     private static final boolean LOG_ON = false;
-    private static final String TAG = "DisciplinaService";
-    private static final String URL = "http://192.168.1.10/IFSP-ServicosWS/notas/mediaFinalAlunoTurmaDisciplina";
+    private static final String TAG = "NoticiasService";
+    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/noticia/listar";
 
-    public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
-        List<Disciplina> disciplinas = null;
+    public static List<Noticia> getNoticia(Context context) throws IOException {
+        List<Noticia> noticias = null;
 
-        if(disciplinas != null && disciplinas.size() > 0){
+        if(noticias != null && noticias.size() > 0){
             //Encontrou o arquivo
-            return disciplinas;
+            return noticias;
         }
         if (isOnline(context)) {
             //Se estiver online, busca do webservice
-            disciplinas = getDisciplinasFromWebService(context, semestre);
+            noticias = getNoticiasFromWebService(context);
         } else {
             //Se não estiver online, busca do JSON local
-            disciplinas = getDisciplinasFromArquivo(context, semestre);
+            noticias = getNoticiasFromArquivo(context);
             Toast.makeText(context, "Conexão com a internet não disponível", Toast.LENGTH_SHORT).show();
         }
-        return disciplinas;
+        return noticias;
     }
 
-    private static String doPost(String url, Context context, String semestre) throws IOException{
+    private static String doPost(String url, Context context) throws IOException{
         SQLiteHandler db = new SQLiteHandler(context);
 
         HashMap<String, String> user = db.getUserDetails();
         String token = user.get("token");
-        String id_usuario = user.get("id_usuario");
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
         RequestBody body = new FormEncodingBuilder()
-                .add("id_usuario", id_usuario)
-                .add("semestre", semestre)
                 .build();
         Request request = new Request.Builder()
                 .url(url)
@@ -78,46 +74,45 @@ public class DisciplinaService {
         return response.body().string();
     }
 
-    private static List<Disciplina> parserJSON(Context context, String json) throws IOException {
-        List<Disciplina> disciplinas = new ArrayList<Disciplina>();
+    private static List<Noticia> parserJSON(Context context, String json) throws IOException {
+        List<Noticia> noticias = new ArrayList<Noticia>();
         try {
             JSONObject root = new JSONObject(json);
-            JSONArray jsonDisciplinas = root.getJSONArray("data");
-            // Insere cada Disciplina na lista
-            for (int i = 0; i < jsonDisciplinas.length(); i++) {
-                JSONObject jsonDisciplina = jsonDisciplinas.getJSONObject(i);
-                Disciplina d = new Disciplina();
-                // Lê as informações de cada Disciplina
-                d.codigo = jsonDisciplina.optString("codigo_disciplina");
-                d.descricao = "Descrição: " + jsonDisciplina.optString("nome_disciplina") + " (" + jsonDisciplina.optString("codigo_disciplina") + ")";
-                d.nota = "Media: " + jsonDisciplina.optString("media_final");
-                d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia");
+            JSONArray jsonNoticias = root.getJSONArray("data");
+            // Insere cada Noticia na lista
+            for (int i = 0; i < jsonNoticias.length(); i++) {
+                JSONObject jsonNoticia = jsonNoticias.getJSONObject(i);
+                Noticia d = new Noticia();
+                // Lê as informações de cada Noticia
+                d.id_noticia = jsonNoticia.optLong("id_noticia");
+                d.titulo = "Título: " + jsonNoticia.optString("titulo");
+                d.corpo = jsonNoticia.optString("corpo");
                 if (LOG_ON) {
-                    Log.d(TAG, "Disciplina " + d.codigo);
+                    Log.d(TAG, "Noticia " + d.id_noticia);
                 }
-                disciplinas.add(d);
+                noticias.add(d);
             }
             if (LOG_ON) {
-                Log.d(TAG, disciplinas.size() + " encontrados.");
+                Log.d(TAG, noticias.size() + " encontrados.");
             }
         } catch (JSONException e) {
             throw new IOException(e.getMessage(), e);
         }
-        return disciplinas;
+        return noticias;
     }
 
-    public static List<Disciplina> getDisciplinasFromWebService(Context context, String semestre) throws IOException{
+    public static List<Noticia> getNoticiasFromWebService(Context context) throws IOException{
         String json;
 
-        json = doPost(URL, context, semestre);
-        salvaArquivoNaMemoriaInterna(context, semestre, json);
-        List<Disciplina> disciplinas = parserJSON(context, json);
-        return disciplinas;
+        json = doPost(URL, context);
+        salvaArquivoNaMemoriaInterna(context, json);
+        List<Noticia> noticias = parserJSON(context, json);
+        return noticias;
     }
 
     //Abre o arquivo salvo, se existir, e cria a lista de carros
-    public static List<Disciplina> getDisciplinasFromArquivo(Context context, String semestre) throws IOException{
-        String fileName = String.format("disciplinas_semestre_" + semestre + ".json");
+    public static List<Noticia> getNoticiasFromArquivo(Context context) throws IOException{
+        String fileName = String.format("noticias_ifsp.json");
         Log.d(TAG, "Abrindo o arquivo: " + fileName);
         //Lê o arquivo da memória interna
         String json = readFile(context, fileName, "UTF-8");
@@ -127,13 +122,13 @@ public class DisciplinaService {
             return null;
         }
 
-        List<Disciplina> disciplinas = parserJSON(context, json);
-        Log.d(TAG, "Disciplinas lidas do arquivo " + fileName);
-        return disciplinas;
+        List<Noticia> noticias = parserJSON(context, json);
+        Log.d(TAG, "Noticias lidas do arquivo " + fileName);
+        return noticias;
     }
 
-    private static void salvaArquivoNaMemoriaInterna(Context context, String semestre, String json){
-        String fileName = "disciplinas_semestre_" + semestre + ".json";
+    private static void salvaArquivoNaMemoriaInterna(Context context, String json){
+        String fileName = "noticias_ifsp.json";
         File file = context.getFileStreamPath(fileName);
         try{
             FileOutputStream out = new FileOutputStream(file);

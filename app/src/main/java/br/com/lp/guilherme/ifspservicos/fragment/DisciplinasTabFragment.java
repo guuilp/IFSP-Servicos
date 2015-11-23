@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import br.com.lp.guilherme.ifspservicos.R;
+import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.TabsAdapter;
 
 /**
@@ -24,6 +25,7 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_disciplinas_tab, container, false);
         //View Pager
+        ((MainActivity) getActivity()).setTitle("IFSP Serviços - Disciplinas");
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new TabsAdapter(getContext(), getChildFragmentManager()));
