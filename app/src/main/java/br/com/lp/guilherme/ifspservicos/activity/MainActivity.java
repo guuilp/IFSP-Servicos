@@ -76,11 +76,6 @@ public class MainActivity extends AppCompatActivity {
                         mCurrentSelectedPosition = 2;
                         mDrawerLayout.closeDrawers();
                         return true;
-                    case R.id.nav_friends:
-                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
-                        mCurrentSelectedPosition = 3;
-                        mDrawerLayout.closeDrawers();
-                        return true;
                     case R.id.nav_discussion:
                         Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
                         mCurrentSelectedPosition = 4;

@@ -35,7 +35,7 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 public class NoticiasService {
     private static final boolean LOG_ON = false;
     private static final String TAG = "NoticiasService";
-    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/noticia/listar";
+    private static String URL = "http://192.168.1.15/IFSP-ServicosWS/noticia/listar";
 
     public static List<Noticia> getNoticia(Context context) throws IOException {
         List<Noticia> noticias = null;
