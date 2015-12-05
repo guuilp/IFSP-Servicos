@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import java.util.HashMap;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         setUpToolbar();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_drawer);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
@@ -49,12 +54,18 @@ public class MainActivity extends AppCompatActivity {
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
-
         // session manager
         session = new SessionManager(getApplicationContext());
 
+        View header = mNavigationView.getHeaderView(0);
+        TextView text = (TextView) header.findViewById(R.id.nomeAluno);
+
+        HashMap<String, String> user = db.getUserDetails();
+
+        text.setText(user.get("name"));
+
         setUpNavDrawer();
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+
         mContentFrame = (FrameLayout) findViewById(R.id.nav_contentframe);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -83,14 +94,11 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_logout:
                         session.setLogin(false);
-
                         db.deleteUsers();
-
                         // Launching the login activity
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
-
                         mCurrentSelectedPosition = 5;
                         mDrawerLayout.closeDrawers();
                         return true;

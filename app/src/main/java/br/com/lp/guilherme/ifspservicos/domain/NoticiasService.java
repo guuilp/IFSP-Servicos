@@ -35,7 +35,7 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 public class NoticiasService {
     private static final boolean LOG_ON = false;
     private static final String TAG = "NoticiasService";
-    private static String URL = "http://192.168.1.15/IFSP-ServicosWS/noticia/listar";
+    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/noticia/listar";
 
     public static List<Noticia> getNoticia(Context context) throws IOException {
         List<Noticia> noticias = null;
@@ -85,7 +85,7 @@ public class NoticiasService {
                 Noticia d = new Noticia();
                 // Lê as informações de cada Noticia
                 d.id_noticia = jsonNoticia.optLong("id_noticia");
-                d.titulo = "Título: " + jsonNoticia.optString("titulo");
+                d.titulo = jsonNoticia.optString("titulo");
                 d.corpo = jsonNoticia.optString("corpo");
                 if (LOG_ON) {
                     Log.d(TAG, "Noticia " + d.id_noticia);

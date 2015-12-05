@@ -102,7 +102,6 @@ public class NoticiasFragment extends Fragment {
                 Intent intent = new Intent(getContext(), NoticiaActivity.class);
                 intent.putExtra("noticia", c);
                 startActivity(intent);
-                Toast.makeText(getContext(), "Noticia: " + c.id_noticia, Toast.LENGTH_LONG).show();
             }
         };
     }
