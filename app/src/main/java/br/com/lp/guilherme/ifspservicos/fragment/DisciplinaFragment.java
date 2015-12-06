@@ -10,12 +10,14 @@ import android.widget.TextView;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.domain.Disciplina;
+import br.com.lp.guilherme.ifspservicos.domain.Nota;
 
 /**
  * Created by Guilherme on 08-Sep-15.
  */
 public class DisciplinaFragment extends Fragment {
     private Disciplina disciplina;
+    private Nota nota;
 
     @Nullable
     @Override
@@ -25,17 +27,20 @@ public class DisciplinaFragment extends Fragment {
     }
 
     //Método público chamado pela activity para atualizar a lista das disciplinas
-    public void setDisciplina(Disciplina disciplina){
-        if(disciplina != null){
-            this.disciplina = disciplina;
+    public void setNotas(Nota nota){
+        if(nota != null){
+            this.nota = nota;
             View view = this.getView();
             if (view != null){
-                TextView nome = (TextView) view.findViewById(R.id.nome);
-                TextView nota = (TextView) view.findViewById(R.id.nota);
-                TextView frequencia = (TextView) view.findViewById(R.id.frequencia);
-                nome.setText(disciplina.descricao);
-                nota.setText(disciplina.nota);
-                frequencia.setText(disciplina.frequencia);
+                TextView descricao_avaliacao = (TextView) view.findViewById(R.id.descricao_avaliacao);
+                TextView data_avaliacao = (TextView) view.findViewById(R.id.data_avaliacao);
+                TextView nota_avaliacao = (TextView) view.findViewById(R.id.nota_avaliacao);
+                TextView peso_avaliacao = (TextView) view.findViewById(R.id.peso_avaliacao);
+
+                descricao_avaliacao.setText(nota.descricao_avaliacao);
+                data_avaliacao.setText(nota.data_avaliacao);
+                nota_avaliacao.setText(nota.nota_avaliacao);
+                peso_avaliacao.setText(nota.peso_avaliacao);
             }
         }
     }

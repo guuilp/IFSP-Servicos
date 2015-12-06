@@ -26,7 +26,7 @@ import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
 import br.com.lp.guilherme.ifspservicos.activity.NoticiaActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.NoticiaAdapter;
 import br.com.lp.guilherme.ifspservicos.domain.Noticia;
-import br.com.lp.guilherme.ifspservicos.domain.NoticiasService;
+import br.com.lp.guilherme.ifspservicos.domain.NoticiaService;
 
 /**
  * Created by Guilherme on 22-Nov-15.
@@ -76,7 +76,7 @@ public class NoticiasFragment extends Fragment {
                     Looper.prepare();
                 }
                 //Busca as noticias em background (Thread)
-                return NoticiasService.getNoticia(getContext());
+                return NoticiaService.getNoticia(getContext());
             } catch (IOException e){
                 Toast.makeText(getContext(), "Não foi possivel recuperar a lista de noticias", Toast.LENGTH_LONG).show();
                 Log.e("ifspservicos", e.getMessage(), e);
@@ -102,7 +102,6 @@ public class NoticiasFragment extends Fragment {
                 Intent intent = new Intent(getContext(), NoticiaActivity.class);
                 intent.putExtra("noticia", c);
                 startActivity(intent);
-                Toast.makeText(getContext(), "Noticia: " + c.id_noticia, Toast.LENGTH_LONG).show();
             }
         };
     }

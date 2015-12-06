@@ -1,6 +1,7 @@
 package br.com.lp.guilherme.ifspservicos.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -21,9 +22,12 @@ import java.io.IOException;
 import java.util.List;
 
 import br.com.lp.guilherme.ifspservicos.R;
+import br.com.lp.guilherme.ifspservicos.activity.DisciplinaActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.DisciplinaAdapter;
 import br.com.lp.guilherme.ifspservicos.domain.Disciplina;
 import br.com.lp.guilherme.ifspservicos.domain.DisciplinaService;
+import br.com.lp.guilherme.ifspservicos.domain.Nota;
+import br.com.lp.guilherme.ifspservicos.domain.NotaService;
 
 /**
  * Created by Guilherme on 20-Sep-15.
@@ -32,12 +36,14 @@ public class DisciplinasFragment extends Fragment{
 
     protected RecyclerView recyclerView;
     private List<Disciplina> disciplinas;
+
     private LinearLayoutManager mLayoutManager;
     private String semestre;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_disciplina, container, false);
+        View view = inflater.inflate(R.layout.fragment_disciplinas, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -97,7 +103,9 @@ public class DisciplinasFragment extends Fragment{
             @Override
             public void onClickDisciplina(View view, int idx) {
                 Disciplina c = disciplinas.get(idx);
-                Toast.makeText(getContext(), "Disciplina: " + c.codigo, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), DisciplinaActivity.class);
+                intent.putExtra("disciplina", c);
+                startActivity(intent);
             }
         };
     }

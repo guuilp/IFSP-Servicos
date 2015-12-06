@@ -32,7 +32,6 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         int cor = getContext().getResources().getColor(R.color.white);
         tabLayout.setTabTextColors(cor, cor);
-//        tabLayout.addTab(tabLayout.newTab().setText("3º Semestre"));
         tabLayout.addTab(tabLayout.newTab().setText("4º Semestre"));
         tabLayout.addTab(tabLayout.newTab().setText("5º Semestre"));
         tabLayout.setOnTabSelectedListener(this);

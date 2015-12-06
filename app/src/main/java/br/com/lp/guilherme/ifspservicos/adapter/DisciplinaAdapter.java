@@ -35,11 +35,21 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
     }
 
     @Override
-    public void onBindViewHolder(DisciplinaViewHolder holder, int position) {
+    public void onBindViewHolder(final DisciplinaViewHolder holder, final int position) {
         Disciplina d = disciplinas.get(position);
         holder.tNome.setText(d.descricao);
         holder.tNota.setText(d.nota);
         holder.tFrequencia.setText(d.frequencia);
+        //Click
+        if (disciplinaOnClickListener != null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //A variável position e final
+                    disciplinaOnClickListener.onClickDisciplina(holder.itemView, position);
+                }
+            });
+        }
     }
 
     @Override

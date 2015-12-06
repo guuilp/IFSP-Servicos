@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Disciplina implements Serializable{
     private static final long serialVersionUID = 6601006766832473959L;
 
-    public long id;
+    public String id;
     public String codigo;
     public String descricao;
     public String nota;

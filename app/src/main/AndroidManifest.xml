@@ -32,6 +32,14 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
+            android:name=".activity.DisciplinaActivity"
+            android:label="Disciplina Activity"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"

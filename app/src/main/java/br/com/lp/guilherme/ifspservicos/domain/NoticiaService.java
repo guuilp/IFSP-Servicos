@@ -32,10 +32,10 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 /**
  * Created by Guilherme on 22-Nov-15.
  */
-public class NoticiasService {
+public class NoticiaService {
     private static final boolean LOG_ON = false;
-    private static final String TAG = "NoticiasService";
-    private static String URL = "http://192.168.1.15/IFSP-ServicosWS/noticia/listar";
+    private static final String TAG = "NoticiaService";
+    private static String URL = "http://192.168.1.17/IFSP-ServicosWS/noticia/listar";
 
     public static List<Noticia> getNoticia(Context context) throws IOException {
         List<Noticia> noticias = null;
