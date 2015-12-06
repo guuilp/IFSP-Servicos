@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import br.com.lp.guilherme.ifspservicos.R;
+import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.DataAvaliacoesAdapter;
 import br.com.lp.guilherme.ifspservicos.adapter.DisciplinaAdapter;
 import br.com.lp.guilherme.ifspservicos.domain.DataAvaliacoes;
@@ -44,6 +45,7 @@ public class DatasAvaliacoesFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        ((MainActivity) getActivity()).setTitle("IFSP Serviços - Datas");
         return view;
     }
 
@@ -86,6 +88,7 @@ public class DatasAvaliacoesFragment extends Fragment {
         @Override
         protected void onPostExecute(List<DataAvaliacoes> dataAvaliacoes) {
             if(dataAvaliacoes != null){
+                DatasAvaliacoesFragment.this.datasAvaliacoes = dataAvaliacoes;
                 //Atualiza a view na UI Thread
                 recyclerView.setAdapter(new DataAvaliacoesAdapter(dataAvaliacoes, getContext(), onClickDataAvaliacoes()));
             }

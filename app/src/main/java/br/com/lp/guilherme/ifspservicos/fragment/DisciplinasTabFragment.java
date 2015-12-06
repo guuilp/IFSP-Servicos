@@ -1,17 +1,30 @@
 package br.com.lp.guilherme.ifspservicos.fragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.List;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
+import br.com.lp.guilherme.ifspservicos.adapter.NoticiaAdapter;
 import br.com.lp.guilherme.ifspservicos.adapter.TabsAdapter;
+import br.com.lp.guilherme.ifspservicos.domain.Semestre;
+import br.com.lp.guilherme.ifspservicos.domain.SemestreService;
 
 /**
  * Created by Guilherme on 20-Sep-15.
@@ -19,6 +32,7 @@ import br.com.lp.guilherme.ifspservicos.adapter.TabsAdapter;
 public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabSelectedListener {
     private ViewPager mViewPager;
     private TabLayout tabLayout;
+    private List<Semestre> semestres;
 
     @Nullable
     @Override
@@ -27,13 +41,11 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
         //View Pager
         ((MainActivity) getActivity()).setTitle("IFSP Serviços - Disciplinas");
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setAdapter(new TabsAdapter(getContext(), getChildFragmentManager()));
+        mViewPager.setOffscreenPageLimit(4);
+        taskSemestres();
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         int cor = getContext().getResources().getColor(R.color.white);
         tabLayout.setTabTextColors(cor, cor);
-        tabLayout.addTab(tabLayout.newTab().setText("4º Semestre"));
-        tabLayout.addTab(tabLayout.newTab().setText("5º Semestre"));
         tabLayout.setOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         mViewPager.setCurrentItem(2);
@@ -53,5 +65,55 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    private void taskSemestres() {
+        new GetSemestresTask().execute();
+    }
+
+    private class GetSemestresTask extends AsyncTask<Void, Void, List<Semestre>> {
+
+        @Override
+        protected List<Semestre> doInBackground(Void... params) {
+            try{
+                //Caso não estiver online, coloca na fila
+                if(!isOnline()){
+                    Looper.prepare();
+                }
+                //Busca as noticias em background (Thread)
+                return SemestreService.getSemestres(getContext());
+            } catch (IOException e){
+                Toast.makeText(getContext(), "Não foi possivel recuperar a lista de noticias", Toast.LENGTH_LONG).show();
+                Log.e("ifspservicos", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Semestre> semestres) {
+            if(semestres != null){
+                DisciplinasTabFragment.this.semestres = semestres;
+                mViewPager.setAdapter(new TabsAdapter(getContext(), getChildFragmentManager(), semestres));
+                for (int i = 0; i < semestres.size(); i++) {
+                    tabLayout.addTab(tabLayout.newTab().setText(semestres.get(i).ano + " - " + semestres.get(i).semestre));
+                }
+            }
+        }
+    }
+
+    private NoticiaAdapter.NoticiaOnClickListener onClickNoticia() {
+        return new NoticiaAdapter.NoticiaOnClickListener() {
+            @Override
+            public void onClickNoticia(View view, int idx) {
+                Semestre s = semestres.get(idx);
+            }
+        };
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

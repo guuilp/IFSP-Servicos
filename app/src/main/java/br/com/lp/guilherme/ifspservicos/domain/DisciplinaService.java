@@ -38,7 +38,7 @@ public class DisciplinaService {
     private static final String TAG = "DisciplinaService";
     private static final String URL = "http://192.168.1.10/IFSP-ServicosWS/notas/mediaFinalAlunoTurmaDisciplina";
 
-    public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
+    public static List<Disciplina> getDisciplinas(Context context, String ano, String semestre) throws IOException{
         List<Disciplina> disciplinas = null;
 
         if(disciplinas != null && disciplinas.size() > 0){
@@ -47,16 +47,16 @@ public class DisciplinaService {
         }
         if (isOnline(context)) {
             //Se estiver online, busca do webservice
-            disciplinas = getDisciplinasFromWebService(context, semestre);
+            disciplinas = getDisciplinasFromWebService(context, ano, semestre);
         } else {
             //Se não estiver online, busca do JSON local
-            disciplinas = getDisciplinasFromArquivo(context, semestre);
+            disciplinas = getDisciplinasFromArquivo(context, ano, semestre);
             Toast.makeText(context, "Conexão com a internet não disponível", Toast.LENGTH_SHORT).show();
         }
         return disciplinas;
     }
 
-    private static String doPost(String url, Context context, String semestre) throws IOException{
+    private static String doPost(String url, Context context, String ano, String semestre) throws IOException{
         SQLiteHandler db = new SQLiteHandler(context);
 
         HashMap<String, String> user = db.getUserDetails();
@@ -67,6 +67,7 @@ public class DisciplinaService {
 
         RequestBody body = new FormEncodingBuilder()
                 .add("id_usuario", id_usuario)
+                .add("ano", ano)
                 .add("semestre", semestre)
                 .build();
         Request request = new Request.Builder()
@@ -90,7 +91,7 @@ public class DisciplinaService {
                 // Lê as informações de cada Disciplina
                 d.id = jsonDisciplina.optString("id_disciplina");
                 d.codigo = jsonDisciplina.optString("codigo_disciplina");
-                d.descricao = "Descrição: " + jsonDisciplina.optString("nome_disciplina") + " (" + jsonDisciplina.optString("codigo_disciplina") + ")";
+                d.descricao = "Descrição: " + jsonDisciplina.optString("descricao_disciplina") + " (" + jsonDisciplina.optString("codigo_disciplina") + ")";
                 d.nota = "Media: " + jsonDisciplina.optString("media_final");
                 d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia");
                 if (LOG_ON) {
@@ -107,18 +108,18 @@ public class DisciplinaService {
         return disciplinas;
     }
 
-    public static List<Disciplina> getDisciplinasFromWebService(Context context, String semestre) throws IOException{
+    public static List<Disciplina> getDisciplinasFromWebService(Context context, String ano, String semestre) throws IOException{
         String json;
 
-        json = doPost(URL, context, semestre);
-        salvaArquivoNaMemoriaInterna(context, semestre, json);
+        json = doPost(URL, context, ano, semestre);
+        salvaArquivoNaMemoriaInterna(context, ano, semestre, json);
         List<Disciplina> disciplinas = parserJSON(context, json);
         return disciplinas;
     }
 
     //Abre o arquivo salvo, se existir, e cria a lista de carros
-    public static List<Disciplina> getDisciplinasFromArquivo(Context context, String semestre) throws IOException{
-        String fileName = String.format("disciplinas_semestre_" + semestre + ".json");
+    public static List<Disciplina> getDisciplinasFromArquivo(Context context, String ano, String semestre) throws IOException{
+        String fileName = String.format("disciplinas_ano_" + ano + "_semestre_" + semestre + ".json");
         Log.d(TAG, "Abrindo o arquivo: " + fileName);
         //Lê o arquivo da memória interna
         String json = readFile(context, fileName, "UTF-8");
@@ -133,8 +134,8 @@ public class DisciplinaService {
         return disciplinas;
     }
 
-    private static void salvaArquivoNaMemoriaInterna(Context context, String semestre, String json){
-        String fileName = "disciplinas_semestre_" + semestre + ".json";
+    private static void salvaArquivoNaMemoriaInterna(Context context, String ano, String semestre, String json){
+        String fileName = "disciplinas_ano_" + ano + "_semestre_" + semestre + ".json";
         File file = context.getFileStreamPath(fileName);
         try{
             FileOutputStream out = new FileOutputStream(file);

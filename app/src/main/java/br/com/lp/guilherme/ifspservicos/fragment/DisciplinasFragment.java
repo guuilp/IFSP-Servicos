@@ -38,6 +38,7 @@ public class DisciplinasFragment extends Fragment{
     private List<Disciplina> disciplinas;
 
     private LinearLayoutManager mLayoutManager;
+    private String ano;
     private String semestre;
 
 
@@ -56,6 +57,7 @@ public class DisciplinasFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
+            this.ano = getArguments().getString("ano");
             this.semestre = getArguments().getString("semestre");
         }
     }
@@ -80,7 +82,7 @@ public class DisciplinasFragment extends Fragment{
                     Looper.prepare();
                 }
                 //Busca as disciplinas em background (Thread)
-                return DisciplinaService.getDisciplinas(getContext(), semestre);
+                return DisciplinaService.getDisciplinas(getContext(), ano, semestre);
             } catch (IOException e){
                 Toast.makeText(getContext(), "Não foi possivel recuperar a lista de disciplinas", Toast.LENGTH_LONG).show();
                 Log.e("ifspservicos", e.getMessage(), e);

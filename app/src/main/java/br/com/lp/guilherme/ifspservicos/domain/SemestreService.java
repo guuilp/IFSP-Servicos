@@ -6,8 +6,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -25,7 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +32,13 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 /**
  * Created by Guilherme on 05/12/2015.
  */
-public class DataAvaliacoesService {
+public class SemestreService {
     private static final boolean LOG_ON = false;
     private static final String TAG = "DataAvaliacoesService";
-    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/data/listarProximasAvaliacoes";
+    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/notas/listarSemestresDoAluno";
 
-    public static List<DataAvaliacoes> getDataAvaliacoes(Context context) throws IOException {
-        List<DataAvaliacoes> dataAvaliacoes = null;
+    public static List<Semestre> getSemestres(Context context) throws IOException {
+        List<Semestre> dataAvaliacoes = null;
 
         if(dataAvaliacoes != null && dataAvaliacoes.size() > 0){
             //Encontrou o arquivo
@@ -49,10 +46,10 @@ public class DataAvaliacoesService {
         }
         if (isOnline(context)) {
             //Se estiver online, busca do webservice
-            dataAvaliacoes = getDataAvaliacoesFromWebService(context);
+            dataAvaliacoes = getSemestresFromWebService(context);
         } else {
             //Se não estiver online, busca do JSON local
-            dataAvaliacoes = getDataAvaliacoesFromArquivo(context);
+            dataAvaliacoes = getSemestresFromArquivo(context);
             Toast.makeText(context, "Conexão com a internet não disponível", Toast.LENGTH_SHORT).show();
         }
         return dataAvaliacoes;
@@ -79,46 +76,44 @@ public class DataAvaliacoesService {
         return response.body().string();
     }
 
-    private static List<DataAvaliacoes> parserJSON(Context context, String json) throws IOException {
-        List<DataAvaliacoes> dataAvaliacoes = new ArrayList<DataAvaliacoes>();
+    private static List<Semestre> parserJSON(Context context, String json) throws IOException {
+        List<Semestre> semestres = new ArrayList<Semestre>();
         try {
             JSONObject root = new JSONObject(json);
             JSONArray jsonNoticias = root.getJSONArray("data");
             // Insere cada Noticia na lista
             for (int i = 0; i < jsonNoticias.length(); i++) {
                 JSONObject jsonNoticia = jsonNoticias.getJSONObject(i);
-                DataAvaliacoes da = new DataAvaliacoes();
+                Semestre s = new Semestre();
                 // Lê as informações de cada Noticia
-                da.descricao_disciplina = jsonNoticia.optString("descricao_disciplina");
-                da.descricao_avaliacao = jsonNoticia.optString("descricao_avaliacao");
-                da.data_avaliacao = "Data: " + jsonNoticia.optString("data_avaliacao");
-                da.dias_restantes = "Daqui " +  jsonNoticia.optString("dias_restantes") + " dia(s)";
+                s.ano = jsonNoticia.optString("ano");
+                s.semestre = jsonNoticia.optString("semestre");
                 if (LOG_ON) {
-                    Log.d(TAG, "Avaliacao " + da.descricao_avaliacao);
+                    Log.d(TAG, "Avaliacao " + s.ano);
                 }
-                dataAvaliacoes.add(da);
+                semestres.add(s);
             }
             if (LOG_ON) {
-                Log.d(TAG, dataAvaliacoes.size() + " encontrados.");
+                Log.d(TAG, semestres.size() + " encontrados.");
             }
         } catch (JSONException e) {
             throw new IOException(e.getMessage(), e);
         }
-        return dataAvaliacoes;
+        return semestres;
     }
 
-    public static List<DataAvaliacoes> getDataAvaliacoesFromWebService(Context context) throws IOException{
+    public static List<Semestre> getSemestresFromWebService(Context context) throws IOException{
         String json;
 
         json = doPost(URL, context);
         salvaArquivoNaMemoriaInterna(context, json);
-        List<DataAvaliacoes> noticias = parserJSON(context, json);
-        return noticias;
+        List<Semestre> semestres = parserJSON(context, json);
+        return semestres;
     }
 
     //Abre o arquivo salvo, se existir, e cria a lista de carros
-    public static List<DataAvaliacoes> getDataAvaliacoesFromArquivo(Context context) throws IOException{
-        String fileName = String.format("data_avaliacoes.json");
+    public static List<Semestre> getSemestresFromArquivo(Context context) throws IOException{
+        String fileName = String.format("semestres.json");
         Log.d(TAG, "Abrindo o arquivo: " + fileName);
         //Lê o arquivo da memória interna
         String json = readFile(context, fileName, "UTF-8");
@@ -128,13 +123,13 @@ public class DataAvaliacoesService {
             return null;
         }
 
-        List<DataAvaliacoes> noticias = parserJSON(context, json);
-        Log.d(TAG, "Data das avaliações lidas do arquivo " + fileName);
-        return noticias;
+        List<Semestre> semestres = parserJSON(context, json);
+        Log.d(TAG, "Semestres lidos do arquivo " + fileName);
+        return semestres;
     }
 
     private static void salvaArquivoNaMemoriaInterna(Context context, String json){
-        String fileName = "data_avaliacoes.json";
+        String fileName = "semestres.json";
         File file = context.getFileStreamPath(fileName);
         try{
             FileOutputStream out = new FileOutputStream(file);
