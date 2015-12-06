@@ -36,7 +36,11 @@ public class DisciplinaService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = "DisciplinaService";
+<<<<<<< HEAD
     private static final String URL = "http://192.168.1.17/IFSP-ServicosWS/notas/mediaFinalAlunoTurmaDisciplina";
+=======
+    private static final String URL = "http://192.168.1.10/IFSP-ServicosWS/notas/mediaFinalAlunoTurmaDisciplina";
+>>>>>>> origin/master
 
     public static List<Disciplina> getDisciplinas(Context context, String semestre) throws IOException{
         List<Disciplina> disciplinas = null;

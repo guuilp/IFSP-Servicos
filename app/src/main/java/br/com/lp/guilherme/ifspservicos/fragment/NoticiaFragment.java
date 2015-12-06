@@ -31,10 +31,10 @@ public class NoticiaFragment extends Fragment {
             this.noticia = noticia;
             View view = this.getView();
             if (view != null){
-////                TextView titulo = (TextView) view.findViewById(R.id.titulo);
-//                if(titulo != null) {
-//                    titulo.setText(noticia.titulo);
-//                }
+                TextView titulo = (TextView) view.findViewById(R.id.titulo);
+                if(titulo != null) {
+                    titulo.setText(noticia.titulo);
+                }
                 TextView corpo = (TextView)view.findViewById(R.id.corpo);
                 if(corpo != null) {
                     corpo.setText(noticia.corpo);
