@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import br.com.lp.guilherme.ifspservicos.R;
+import br.com.lp.guilherme.ifspservicos.fragment.DatasAvaliacoesFragment;
 import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
 import br.com.lp.guilherme.ifspservicos.fragment.NoticiasFragment;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
@@ -70,10 +71,11 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setCheckable(true);
                 menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
-                    case R.id.nav_home:
-                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
+                    case R.id.nav_data_avaliacoes:
+                        replaceFragment(new DatasAvaliacoesFragment());
                         mCurrentSelectedPosition = 0;
                         mDrawerLayout.closeDrawers();
                         return true;
@@ -95,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_logout:
                         session.setLogin(false);
                         db.deleteUsers();
-                        // Launching the login activity
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();

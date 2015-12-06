@@ -100,7 +100,7 @@ public class DisciplinaActivity extends AppCompatActivity {
                 for (int i=0; i< notas.size(); i++){
                     df.setNotas(notas.get(i));
                 }
-                recyclerView.setAdapter(new DisciplinaAdapter(disciplinas, getContext(), onClickDisciplina()));
+                //recyclerView.setAdapter(new DisciplinaAdapter(disciplinas, getContext(), onClickDisciplina()));
             }
         }
     }

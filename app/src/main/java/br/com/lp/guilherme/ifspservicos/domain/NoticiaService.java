@@ -34,13 +34,8 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
  */
 public class NoticiaService {
     private static final boolean LOG_ON = false;
-<<<<<<< HEAD:app/src/main/java/br/com/lp/guilherme/ifspservicos/domain/NoticiaService.java
-    private static final String TAG = "NoticiaService";
-    private static String URL = "http://192.168.1.17/IFSP-ServicosWS/noticia/listar";
-=======
     private static final String TAG = "NoticiasService";
     private static String URL = "http://192.168.1.10/IFSP-ServicosWS/noticia/listar";
->>>>>>> origin/master:app/src/main/java/br/com/lp/guilherme/ifspservicos/domain/NoticiasService.java
 
     public static List<Noticia> getNoticia(Context context) throws IOException {
         List<Noticia> noticias = null;
