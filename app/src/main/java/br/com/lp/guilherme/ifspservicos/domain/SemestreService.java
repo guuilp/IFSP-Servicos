@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.lp.guilherme.ifspservicos.app.AppConfig;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 
 /**
@@ -35,7 +36,6 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 public class SemestreService {
     private static final boolean LOG_ON = false;
     private static final String TAG = "DataAvaliacoesService";
-    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/notas/listarSemestresDoAluno";
 
     public static List<Semestre> getSemestres(Context context) throws IOException {
         List<Semestre> dataAvaliacoes = null;
@@ -105,7 +105,7 @@ public class SemestreService {
     public static List<Semestre> getSemestresFromWebService(Context context) throws IOException{
         String json;
 
-        json = doPost(URL, context);
+        json = doPost(AppConfig.URL_SEMESTRE, context);
         salvaArquivoNaMemoriaInterna(context, json);
         List<Semestre> semestres = parserJSON(context, json);
         return semestres;

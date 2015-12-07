@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.lp.guilherme.ifspservicos.app.AppConfig;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 
 /**
@@ -35,7 +36,6 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 public class NoticiaService {
     private static final boolean LOG_ON = false;
     private static final String TAG = "NoticiasService";
-    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/noticia/listar";
 
     public static List<Noticia> getNoticia(Context context) throws IOException {
         List<Noticia> noticias = null;
@@ -104,7 +104,7 @@ public class NoticiaService {
     public static List<Noticia> getNoticiasFromWebService(Context context) throws IOException{
         String json;
 
-        json = doPost(URL, context);
+        json = doPost(AppConfig.URL_NOTICIA, context);
         salvaArquivoNaMemoriaInterna(context, json);
         List<Noticia> noticias = parserJSON(context, json);
         return noticias;

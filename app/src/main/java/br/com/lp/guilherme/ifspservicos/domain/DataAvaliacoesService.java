@@ -6,8 +6,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -25,11 +23,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.lp.guilherme.ifspservicos.app.AppConfig;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 
 /**
@@ -38,7 +36,6 @@ import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 public class DataAvaliacoesService {
     private static final boolean LOG_ON = false;
     private static final String TAG = "DataAvaliacoesService";
-    private static String URL = "http://192.168.1.10/IFSP-ServicosWS/data/listarProximasAvaliacoes";
 
     public static List<DataAvaliacoes> getDataAvaliacoes(Context context) throws IOException {
         List<DataAvaliacoes> dataAvaliacoes = null;
@@ -92,7 +89,14 @@ public class DataAvaliacoesService {
                 da.descricao_disciplina = jsonNoticia.optString("descricao_disciplina");
                 da.descricao_avaliacao = jsonNoticia.optString("descricao_avaliacao");
                 da.data_avaliacao = "Data: " + jsonNoticia.optString("data_avaliacao");
-                da.dias_restantes = "Daqui " +  jsonNoticia.optString("dias_restantes") + " dia(s)";
+                da.dias_restantes = jsonNoticia.optString("dias_restantes");
+                if (da.dias_restantes.equals("1")){
+                    da.dias_restantes = "Amanhã!";
+                } else if (da.dias_restantes.equals("0")){
+                    da.dias_restantes = "Hoje!";
+                } else {
+                    da.dias_restantes = "Daqui " +  jsonNoticia.optString("dias_restantes") + " dias";
+                }
                 if (LOG_ON) {
                     Log.d(TAG, "Avaliacao " + da.descricao_avaliacao);
                 }
@@ -110,7 +114,7 @@ public class DataAvaliacoesService {
     public static List<DataAvaliacoes> getDataAvaliacoesFromWebService(Context context) throws IOException{
         String json;
 
-        json = doPost(URL, context);
+        json = doPost(AppConfig.URL_DATA_AVALIACOES, context);
         salvaArquivoNaMemoriaInterna(context, json);
         List<DataAvaliacoes> noticias = parserJSON(context, json);
         return noticias;

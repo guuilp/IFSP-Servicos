@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="140dp"
     android:layout_margin="6dp"
     android:clickable="true"
     card_view:cardBackgroundColor="@color/white"
@@ -20,32 +20,36 @@
             android:id="@+id/descricao_disciplina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="3dp"
-            android:textSize="13sp"
+            android:textSize="19sp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/primary"/>
         <TextView
             android:id="@+id/descricao_avaliacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="3dp"
-            android:textSize="13sp"
+            android:textSize="19sp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/primary"/>
         <TextView
             android:id="@+id/data_avaliacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="3dp"
-            android:textSize="13sp"
+            android:textSize="19sp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/primary"/>
         <TextView
             android:id="@+id/dias_restantes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="3dp"
-            android:textSize="9sp"
+            android:textSize="15sp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/dark_gray"/>
     </LinearLayout>

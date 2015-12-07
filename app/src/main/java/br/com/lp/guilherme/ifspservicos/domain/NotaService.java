@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.lp.guilherme.ifspservicos.app.AppConfig;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 
 /**
@@ -36,7 +37,6 @@ public class NotaService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = "DisciplinaService";
-    private static final String URL = "http://192.168.1.17/IFSP-ServicosWS/notas/listarNotasTurmaDisciplina";
 
     public static List<Nota> getNotasDisciplinas(Context context, String id_disciplina) throws IOException {
         List<Nota> notas = null;
@@ -110,7 +110,7 @@ public class NotaService {
     public static List<Nota> getNotasFromWebService(Context context, String id_disciplina) throws IOException{
         String json;
 
-        json = doPost(URL, context, id_disciplina);
+        json = doPost(AppConfig.URL_NOTA, context, id_disciplina);
         salvaArquivoNaMemoriaInterna(context, id_disciplina, json);
         List<Nota> notas = parserJSON(context, json);
         return notas;

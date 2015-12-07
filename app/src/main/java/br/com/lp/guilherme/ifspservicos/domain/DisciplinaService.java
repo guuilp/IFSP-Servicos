@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.lp.guilherme.ifspservicos.app.AppConfig;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 
 /**
@@ -36,7 +37,6 @@ public class DisciplinaService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = "DisciplinaService";
-    private static final String URL = "http://192.168.1.10/IFSP-ServicosWS/notas/mediaFinalAlunoTurmaDisciplina";
 
     public static List<Disciplina> getDisciplinas(Context context, String ano, String semestre) throws IOException{
         List<Disciplina> disciplinas = null;
@@ -91,7 +91,7 @@ public class DisciplinaService {
                 // Lê as informações de cada Disciplina
                 d.id = jsonDisciplina.optString("id_disciplina");
                 d.codigo = jsonDisciplina.optString("codigo_disciplina");
-                d.descricao = "Descrição: " + jsonDisciplina.optString("descricao_disciplina") + " (" + jsonDisciplina.optString("codigo_disciplina") + ")";
+                d.descricao = jsonDisciplina.optString("descricao_disciplina") + " (" + jsonDisciplina.optString("codigo_disciplina") + ")";
                 d.nota = "Media: " + jsonDisciplina.optString("media_final");
                 d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia");
                 if (LOG_ON) {
@@ -111,7 +111,7 @@ public class DisciplinaService {
     public static List<Disciplina> getDisciplinasFromWebService(Context context, String ano, String semestre) throws IOException{
         String json;
 
-        json = doPost(URL, context, ano, semestre);
+        json = doPost(AppConfig.URL_DISCIPLINA, context, ano, semestre);
         salvaArquivoNaMemoriaInterna(context, ano, semestre, json);
         List<Disciplina> disciplinas = parserJSON(context, json);
         return disciplinas;
