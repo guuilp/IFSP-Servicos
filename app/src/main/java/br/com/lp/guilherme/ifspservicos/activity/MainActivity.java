@@ -20,6 +20,7 @@ import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.fragment.DatasAvaliacoesFragment;
 import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasTabFragment;
 import br.com.lp.guilherme.ifspservicos.fragment.NoticiasFragment;
+import br.com.lp.guilherme.ifspservicos.fragment.TelefonesTabFragment;
 import br.com.lp.guilherme.ifspservicos.helper.SQLiteHandler;
 import br.com.lp.guilherme.ifspservicos.helper.SessionManager;
 
@@ -90,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_discussion:
-                        Snackbar.make(mContentFrame, "Menu ainda não implementado", Snackbar.LENGTH_SHORT).show();
-                        mCurrentSelectedPosition = 4;
+                        replaceFragment(new TelefonesTabFragment());
+                        mCurrentSelectedPosition = 3;
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.nav_logout:
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
-                        mCurrentSelectedPosition = 5;
+                        mCurrentSelectedPosition = 4;
                         mDrawerLayout.closeDrawers();
                         return true;
                     default:

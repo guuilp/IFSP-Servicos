@@ -14,11 +14,11 @@ import br.com.lp.guilherme.ifspservicos.fragment.DisciplinasFragment;
 /**
  * Created by Guilherme on 20-Sep-15.
  */
-public class TabsAdapter extends FragmentPagerAdapter {
+public class DisciplinaTabsAdapter extends FragmentPagerAdapter {
     private Context context;
     private List<Semestre> semestres;
 
-    public TabsAdapter(Context context, FragmentManager fm, List<Semestre> semestres){
+    public DisciplinaTabsAdapter(Context context, FragmentManager fm, List<Semestre> semestres){
         super(fm);
         this.context = context;
         this.semestres = semestres;

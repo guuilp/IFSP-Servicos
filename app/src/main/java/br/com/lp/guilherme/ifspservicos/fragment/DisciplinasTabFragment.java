@@ -22,7 +22,7 @@ import java.util.List;
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.NoticiaAdapter;
-import br.com.lp.guilherme.ifspservicos.adapter.TabsAdapter;
+import br.com.lp.guilherme.ifspservicos.adapter.DisciplinaTabsAdapter;
 import br.com.lp.guilherme.ifspservicos.domain.Semestre;
 import br.com.lp.guilherme.ifspservicos.domain.SemestreService;
 
@@ -93,7 +93,7 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
         protected void onPostExecute(List<Semestre> semestres) {
             if(semestres != null){
                 DisciplinasTabFragment.this.semestres = semestres;
-                mViewPager.setAdapter(new TabsAdapter(getContext(), getChildFragmentManager(), semestres));
+                mViewPager.setAdapter(new DisciplinaTabsAdapter(getContext(), getChildFragmentManager(), semestres));
                 for (int i = 0; i < semestres.size(); i++) {
                     tabLayout.addTab(tabLayout.newTab().setText(semestres.get(i).ano + " - " + semestres.get(i).semestre));
                 }
