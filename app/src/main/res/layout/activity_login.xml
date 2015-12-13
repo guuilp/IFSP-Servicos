@@ -60,6 +60,7 @@
                     android:layout_marginBottom="24dp"
                     android:padding="12dp"
                     android:textColor="@color/white"
+                    android:background="@color/primary"
                     android:text="Login"/>
             </LinearLayout>
         </LinearLayout>
