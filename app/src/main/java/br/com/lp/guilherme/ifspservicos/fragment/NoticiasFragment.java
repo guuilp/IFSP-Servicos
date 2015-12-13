@@ -72,7 +72,7 @@ public class NoticiasFragment extends Fragment {
         protected List<Noticia> doInBackground(Void... params) {
             try{
                 //Caso não estiver online, coloca na fila
-                if(!isOnline()){
+                if (Looper.myLooper() == null){
                     Looper.prepare();
                 }
                 //Busca as noticias em background (Thread)

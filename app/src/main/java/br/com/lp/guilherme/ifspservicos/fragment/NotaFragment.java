@@ -65,7 +65,7 @@ public class NotaFragment extends Fragment {
         protected List<Nota> doInBackground(Void... params) {
             try{
                 //Caso não estiver online, coloca na fila
-                if(!isOnline()){
+                if (Looper.myLooper() == null){
                     Looper.prepare();
                 }
                 //Busca as disciplinas em background (Thread)

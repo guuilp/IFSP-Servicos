@@ -77,7 +77,7 @@ public class DisciplinasTabFragment extends Fragment implements TabLayout.OnTabS
         protected List<Semestre> doInBackground(Void... params) {
             try{
                 //Caso não estiver online, coloca na fila
-                if(!isOnline()){
+                if (Looper.myLooper() == null){
                     Looper.prepare();
                 }
                 //Busca as noticias em background (Thread)

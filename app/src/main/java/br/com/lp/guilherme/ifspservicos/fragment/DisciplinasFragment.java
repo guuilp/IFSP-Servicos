@@ -76,7 +76,7 @@ public class DisciplinasFragment extends Fragment{
         protected List<Disciplina> doInBackground(Void... params) {
             try{
                 //Caso não estiver online, coloca na fila
-                if(!isOnline()){
+                if (Looper.myLooper() == null){
                     Looper.prepare();
                 }
                 //Busca as disciplinas em background (Thread)
