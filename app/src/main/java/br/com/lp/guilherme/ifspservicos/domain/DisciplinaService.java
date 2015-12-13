@@ -93,7 +93,8 @@ public class DisciplinaService {
                 d.codigo = jsonDisciplina.optString("codigo_disciplina");
                 d.descricao = jsonDisciplina.optString("descricao_disciplina") + " (" + jsonDisciplina.optString("codigo_disciplina") + ")";
                 d.nota = "Media: " + jsonDisciplina.optString("media_final");
-                d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia");
+                d.frequencia = "Frequencia: " + jsonDisciplina.optString("frequencia") + "%";
+                d.descricao_situacao = jsonDisciplina.optString("descricao_situacao");
                 if (LOG_ON) {
                     Log.d(TAG, "Disciplina " + d.codigo);
                 }

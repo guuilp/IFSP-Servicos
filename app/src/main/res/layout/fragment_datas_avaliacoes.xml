@@ -5,12 +5,14 @@
     android:layout_height="match_parent"
     android:paddingLeft="6dp"
     android:paddingRight="6dp"
-    tools:context="br.com.lp.guilherme.ifspservicos.fragment.DataFragment">
+    tools:context="br.com.lp.guilherme.ifspservicos.fragment.DataAvaliacoesFragment">
 
     <TextView
+        android:id="@+id/mensagem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Parabéns! Você não tem nada para ser entregue em breve :D"/>
+        android:gravity="center"
+        android:includeFontPadding="false"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

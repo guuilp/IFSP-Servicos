@@ -13,6 +13,7 @@ public class Disciplina implements Serializable{
     public String descricao;
     public String nota;
     public String frequencia;
+    public String descricao_situacao;
 
     @Override
     public String toString() {

@@ -30,7 +30,7 @@ public class NotaAdapter extends RecyclerView.Adapter<NotaAdapter.NotaViewHolder
 
     @Override
     public NotaViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.adapter_disciplina, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.adapter_nota, viewGroup, false);
         NotaViewHolder holder = new NotaViewHolder(view);
         return holder;
     }

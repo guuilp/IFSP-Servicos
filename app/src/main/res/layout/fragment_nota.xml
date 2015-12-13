@@ -5,7 +5,14 @@
     android:layout_height="match_parent"
     android:paddingLeft="6dp"
     android:paddingRight="6dp"
-    tools:context="br.com.lp.guilherme.ifspservicos.fragment.DisciplinaFragment">
+    tools:context=".fragment.NotaFragment">
+
+    <TextView
+        android:id="@+id/mensagem"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:layout_height="match_parent"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -18,4 +25,6 @@
         android:listSelector="@android:color/transparent"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical" />
+
+
 </FrameLayout>

@@ -40,6 +40,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
         holder.tNome.setText(d.descricao);
         holder.tNota.setText(d.nota);
         holder.tFrequencia.setText(d.frequencia);
+        holder.tDescricaoSituacao.setText(d.descricao_situacao);
         //Click
         if (disciplinaOnClickListener != null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +66,8 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
         public TextView tNome;
         public TextView tNota;
         public TextView tFrequencia;
+        public TextView tDescricaoSituacao;
+
         CardView cardView;
 
         public DisciplinaViewHolder(View view) {
@@ -72,6 +75,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
             tNome = (TextView) view.findViewById(R.id.nome);
             tNota = (TextView) view.findViewById(R.id.nota);
             tFrequencia = (TextView) view.findViewById(R.id.frequencia);
+            tDescricaoSituacao = (TextView) view.findViewById(R.id.descricao_situacao);
             cardView = (CardView) view.findViewById(R.id.card_view);
         }
     }

@@ -37,5 +37,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textColor="@color/primary"/>
+        <!-- Situacao do aluno na matéria -->
+        <TextView
+            android:id="@+id/descricao_situacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/primary"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

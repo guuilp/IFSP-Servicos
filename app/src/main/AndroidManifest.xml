@@ -33,7 +33,7 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.DisciplinaActivity"
+            android:name=".activity.NotaActivity"
             android:label="Disciplina Activity"
             android:parentActivityName=".activity.MainActivity" >
             <meta-data

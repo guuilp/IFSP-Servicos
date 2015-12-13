@@ -23,11 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 import br.com.lp.guilherme.ifspservicos.R;
-import br.com.lp.guilherme.ifspservicos.activity.DisciplinaActivity;
-import br.com.lp.guilherme.ifspservicos.adapter.DisciplinaAdapter;
 import br.com.lp.guilherme.ifspservicos.adapter.TelefoneAdapter;
-import br.com.lp.guilherme.ifspservicos.domain.Disciplina;
-import br.com.lp.guilherme.ifspservicos.domain.DisciplinaService;
 import br.com.lp.guilherme.ifspservicos.domain.Telefone;
 import br.com.lp.guilherme.ifspservicos.domain.TelefoneService;
 

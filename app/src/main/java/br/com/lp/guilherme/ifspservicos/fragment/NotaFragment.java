@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -24,88 +25,75 @@ import java.util.List;
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.activity.NotaActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.DisciplinaAdapter;
+import br.com.lp.guilherme.ifspservicos.adapter.NotaAdapter;
 import br.com.lp.guilherme.ifspservicos.domain.Disciplina;
-import br.com.lp.guilherme.ifspservicos.domain.DisciplinaService;
+import br.com.lp.guilherme.ifspservicos.domain.Nota;
+import br.com.lp.guilherme.ifspservicos.domain.NotaService;
 
 /**
- * Created by Guilherme on 20-Sep-15.
+ * Created by Guilherme on 08-Sep-15.
  */
-public class DisciplinasFragment extends Fragment{
+public class NotaFragment extends Fragment {
+    private List<Nota> notas;
+    private String id_disciplina;
 
     protected RecyclerView recyclerView;
-    private List<Disciplina> disciplinas;
-
     private LinearLayoutManager mLayoutManager;
-    private String ano;
-    private String semestre;
 
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_disciplinas, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_nota, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        Disciplina d = (Disciplina) ((NotaActivity) getActivity()).getIntent().getSerializableExtra("disciplina");
+        id_disciplina = d.id;
+        taskNotas();
         return view;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(getArguments() != null){
-            this.ano = getArguments().getString("ano");
-            this.semestre = getArguments().getString("semestre");
-        }
+    private void taskNotas() {
+        new GetNotasTask().execute();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-        taskDisciplinas();
-    }
-
-    private void taskDisciplinas() {
-        new GetDisciplinasTask().execute();
-    }
-
-    private class GetDisciplinasTask extends AsyncTask<Void, Void, List<Disciplina>>{
+    private class GetNotasTask extends AsyncTask<Void, Void, List<Nota>> {
 
         @Override
-        protected List<Disciplina> doInBackground(Void... params) {
+        protected List<Nota> doInBackground(Void... params) {
             try{
                 //Caso não estiver online, coloca na fila
                 if(!isOnline()){
                     Looper.prepare();
                 }
                 //Busca as disciplinas em background (Thread)
-                return DisciplinaService.getDisciplinas(getContext(), ano, semestre);
+                return NotaService.getNotasDisciplinas(getContext(), id_disciplina);
             } catch (IOException e){
-                Toast.makeText(getContext(), "Não foi possivel recuperar a lista de disciplinas", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Não foi possivel recuperar a lista de notas", Toast.LENGTH_LONG).show();
                 Log.e("ifspservicos", e.getMessage(), e);
-                return null;
+                return notas;
             }
         }
 
         @Override
-        protected void onPostExecute(List<Disciplina> disciplinas) {
-            if(disciplinas != null){
-                DisciplinasFragment.this.disciplinas = disciplinas;
-                //Atualiza a view na UI Thread
-                recyclerView.setAdapter(new DisciplinaAdapter(disciplinas, getContext(), onClickDisciplina()));
+        protected void onPostExecute(List<Nota> notas) {
+            if(notas != null) {
+                NotaFragment.this.notas = notas;
+                recyclerView.setAdapter(new NotaAdapter(notas, getContext(), onClickNota()));
+            }
+            if(notas.size() == 0){
+                ((NotaActivity) getActivity()).mensagem.setText("Você ainda não realizou nenhuma atividade (provas, trabalhos, etc) dessa matéria.");
             }
         }
     }
 
-    private DisciplinaAdapter.DisciplinaOnClickListener onClickDisciplina() {
-        return new DisciplinaAdapter.DisciplinaOnClickListener() {
+    private NotaAdapter.NotaOnClickListener onClickNota() {
+        return new NotaAdapter.NotaOnClickListener() {
             @Override
-            public void onClickDisciplina(View view, int idx) {
-                Disciplina c = disciplinas.get(idx);
-                Intent intent = new Intent(getContext(), NotaActivity.class);
-                intent.putExtra("disciplina", c);
-                startActivity(intent);
+            public void onClickNota(View view, int idx) {
+
             }
         };
     }

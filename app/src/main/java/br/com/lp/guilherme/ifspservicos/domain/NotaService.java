@@ -89,7 +89,7 @@ public class NotaService {
                 Nota n = new Nota();
                 // Lê as informações de cada Disciplina
                 n.descricao_avaliacao = "Descrição da Avaliação: " + jsonDisciplina.optString("descricao_avaliacao");
-                n.id_disciplina = jsonDisciplina.optString("id_disciplina");
+                //n.id_disciplina = jsonDisciplina.optString("id_disciplina");
                 n.data_avaliacao = "Data da Avaliação: " + jsonDisciplina.optString("data_avaliacao");
                 n.nota_avaliacao = "Nota: " + jsonDisciplina.optString("nota_avaliacao");
                 n.peso_avaliacao = "Peso: " + jsonDisciplina.optString("peso_avaliacao");

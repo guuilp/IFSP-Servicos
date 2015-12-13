@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import br.com.lp.guilherme.ifspservicos.R;
 import br.com.lp.guilherme.ifspservicos.activity.MainActivity;
+import br.com.lp.guilherme.ifspservicos.activity.NotaActivity;
 import br.com.lp.guilherme.ifspservicos.adapter.DataAvaliacoesAdapter;
 import br.com.lp.guilherme.ifspservicos.adapter.DisciplinaAdapter;
 import br.com.lp.guilherme.ifspservicos.domain.DataAvaliacoes;
@@ -36,6 +38,7 @@ public class DatasAvaliacoesFragment extends Fragment {
     private List<DataAvaliacoes> datasAvaliacoes;
 
     private LinearLayoutManager mLayoutManager;
+    private TextView mensagem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -45,6 +48,7 @@ public class DatasAvaliacoesFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        mensagem = (TextView) view.findViewById(R.id.mensagem);
         ((MainActivity) getActivity()).setTitle("IFSP Serviços - Datas");
         return view;
     }
@@ -91,6 +95,9 @@ public class DatasAvaliacoesFragment extends Fragment {
                 DatasAvaliacoesFragment.this.datasAvaliacoes = dataAvaliacoes;
                 //Atualiza a view na UI Thread
                 recyclerView.setAdapter(new DataAvaliacoesAdapter(dataAvaliacoes, getContext(), onClickDataAvaliacoes()));
+            }
+            if (dataAvaliacoes.size() == 0){
+                mensagem.setText("Você não tem nenhuma atividade (provas, trabalhos, etc) a ser realizado em breve. Aproveite!");
             }
         }
     }

@@ -9,10 +9,10 @@
     <include layout="@layout/toolbar" />
 
     <fragment
-        android:id="@+id/DisciplinaFragment"
-        class="br.com.lp.guilherme.ifspservicos.fragment.DisciplinaFragment"
+        android:id="@+id/NotaFragment"
+        class="br.com.lp.guilherme.ifspservicos.fragment.NotaFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_disciplinas"/>
+        tools:layout="@layout/fragment_nota"/>
 
 </LinearLayout>

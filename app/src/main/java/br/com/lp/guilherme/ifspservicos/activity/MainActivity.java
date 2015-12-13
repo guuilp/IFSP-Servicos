@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -27,15 +28,14 @@ import br.com.lp.guilherme.ifspservicos.helper.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
-    FrameLayout mContentFrame;
-    private SQLiteHandler db;
-    private SessionManager session;
-
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private FrameLayout mContentFrame;
+    private SQLiteHandler db;
+    private SessionManager session;
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private int mCurrentSelectedPosition;
@@ -54,9 +54,8 @@ public class MainActivity extends AppCompatActivity {
             mFromSavedInstanceState = true;
         }
 
-        // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
-        // session manager
+
         session = new SessionManager(getApplicationContext());
 
         View header = mNavigationView.getHeaderView(0);
@@ -109,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
     private void setUpToolbar() {
